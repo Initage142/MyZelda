@@ -1,30 +1,36 @@
-import pygame,sys
-from Setting import *
-from Level import Level
+import pygame, sys
+from settings import *
+from level import Level
 
 class Game:
-    def __init__(self):
+	def __init__(self):
 
-        pygame.init()
+		# general setup
+		pygame.init()
+		self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
+		pygame.display.set_caption('Zelda')
+		self.clock = pygame.time.Clock()
 
-        #创建屏幕窗口
-        self.screen = pygame.display.set_mode((WIDTH,HEIGTH))
-        pygame.display.set_caption('Zelda')
-        self.clock = pygame.time.Clock()
+		self.level = Level()
+	
+	def run(self):
+		while True:
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.quit()
+					sys.exit()
+				if event.type == pygame.KEYDOWN:
+					if event.key == pygame.K_m:
+						self.level.toggle_menu()
+				if event.type == pygame.MOUSEBUTTONDOWN:
+					mouse_pos = pygame.mouse.get_pos()
+					self.level.restart(mouse_pos)
 
-        self.level= Level()
+			self.screen.fill(WATER_COLOR)
+			self.level.run()
+			pygame.display.update()
+			self.clock.tick(FPS)
 
-    def run(self):
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-
-            self.screen.fill('black')
-            self.level.run()
-            pygame.display.update()
-            self.clock.tick(FPS)
 if __name__ == '__main__':
-    game = Game()
-    game.run()
+	game = Game()
+	game.run()
